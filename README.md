@@ -15,3 +15,6 @@ PART 1 :
 --------
 PART 2 : 
 --------
+
+1. Call "initiate_structs()" in the very beginning of your program. This is to give the default 0 value to the ref_counts for both the structs.
+2. User can now use 
