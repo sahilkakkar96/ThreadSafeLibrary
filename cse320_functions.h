@@ -7,8 +7,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-static int aiu_var;
-static int fiu_var;
+
 void initiate_structs();
 void *cse320_malloc(size_t size);       		 				//function returns a pointer to the allocated memory, or NULL if the request fails.
 void cse320_free(void *ptr);									//ptr − This is the pointer to a memory block previously allocated with malloc, calloc or realloc to be deallocated. 
