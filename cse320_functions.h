@@ -20,8 +20,8 @@ struct addr_in_use
 {
 	void* addr;
 	int ref_count; 												//(initial value should be zero)	
-}aiu_default = {NULL,0};
-
+};
+extern struct addr_in_use aiu_default;
 typedef struct addr_in_use aiu;
 
 
@@ -30,10 +30,9 @@ struct files_in_use
 	char* filename;
 	int ref_count; 												//(initial value should be zero)
 	FILE *fileptr;
-}fiu_default = {.filename=NULL, .ref_count=0};
-
+};
+extern struct files_in_use fiu_default;
 typedef struct files_in_use fiu;
 
 aiu ainu[25];
 fiu finu[25];
-	

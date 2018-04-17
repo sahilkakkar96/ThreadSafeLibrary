@@ -72,8 +72,16 @@ int main(int argc, char** argv) {
 		    	{
 		    		if (execvp(*(parseRun+1), cmd)!=0)
 			        {
-			            perror("Wrong Executable Provided");
-			            exit(EXIT_FAILURE);
+			        	char changename[257];
+						strcpy(changename,"./");
+						strcpy(&changename[2],*(parseRun+1));
+						*(cmd)=changename;
+						
+				    	if (execvp(changename, cmd)!=0)
+						{
+						  	perror("Wrong Executable Provided");
+						   	exit(EXIT_FAILURE);
+						}
 			        }
 		    		exit(0);
 		    	}
@@ -82,6 +90,7 @@ int main(int argc, char** argv) {
 		    		printf("FORK ERROR\n");
 		    	}
 		    	else while ((wpid = wait(&status)) > 0);
+		    	
 		    	free(cmd);
 	    	}
 	    	else
@@ -94,16 +103,25 @@ int main(int argc, char** argv) {
 		    	{
 		    		if (execvp(*(parseRun+1), cmd)!=0)
 			        {
-			            perror("Wrong Executable Provided");
-			            exit(EXIT_FAILURE);
-			        }
+				    	char changename[257];
+						strcpy(changename,"./");
+						strcpy(&changename[2],*(parseRun+1));
+						*(cmd)=changename;
+						
+				    	if (execvp(changename, cmd)!=0)
+						{
+						  	perror("Wrong Executable Provided");
+						   	exit(EXIT_FAILURE);
+						}
+					}
 		    		exit(0);
 		    	}
 		    	else if(pid == -1)
 		    	{
 		    		printf("FORK ERROR\n");
 		    	}
-		    	else while ((wpid = wait(&status)) > 0);		
+		    	else while ((wpid = wait(&status)) > 0);	
+		    		
 	    	}
 	    }  
 	    else printf("Enter Correct Command to Run\n");

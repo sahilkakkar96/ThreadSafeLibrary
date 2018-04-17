@@ -1,8 +1,11 @@
 #include "cse320_functions.h"
 static int aiu_var;
 static int fiu_var;
+
 void initiate_structs()
 {
+	struct addr_in_use aiu_default= {NULL,0};
+	struct files_in_use fiu_default= {.filename=NULL, .ref_count=0};
 	int wnua;													//wnua - will not use again xD
 	for(wnua=0;wnua<25;wnua++)
 	{
