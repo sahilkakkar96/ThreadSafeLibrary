@@ -8,7 +8,8 @@
 
 int main(int argc, char** argv) {
 
-	printf("USER PROGRAM RAN\n");
-	
+	printf("USER PROGRAM GOING TO SLEEP\n");
+	sleep(12);
+	printf("USER PROGRAM RAN AFTER SLEEP\n");
 	return 0;
 }

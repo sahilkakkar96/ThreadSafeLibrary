@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 
 int main(int argc, char** argv) {
@@ -14,7 +15,6 @@ int main(int argc, char** argv) {
 	int status,i;
     char app[255],parseRun[255][255];
     char** cmd;
-    //char *filename, *appname;
    
     while(1)
 {
@@ -67,7 +67,11 @@ int main(int argc, char** argv) {
 	    		*(cmd+a)=NULL;
 		    	pid_t pid,wpid;
 		    	pid = fork();
-		    	
+		    	sigset_t mask,prev;
+		    	sigemptyset(&mask);
+				sigfillset(&mask);
+				sigprocmask(SIG_BLOCK, &mask, &prev);
+				
 		    	if(pid == 0)
 		    	{
 		    		if (execvp(*(parseRun+1), cmd)!=0)
@@ -83,6 +87,7 @@ int main(int argc, char** argv) {
 						   	exit(EXIT_FAILURE);
 						}
 			        }
+			        sigprocmask(SIG_SETMASK, &prev, NULL);
 		    		exit(0);
 		    	}
 		    	else if(pid == -1)
@@ -98,7 +103,11 @@ int main(int argc, char** argv) {
 	    		char *cmd[] = { *(parseRun+1), NULL };
 		    	pid_t pid,wpid;
 		    	pid = fork();
-		    	
+		    	sigset_t mask,prev;
+		    	sigemptyset(&mask);
+				sigfillset(&mask);
+				sigprocmask(SIG_BLOCK, &mask, &prev);
+				
 		    	if(pid == 0)
 		    	{
 		    		if (execvp(*(parseRun+1), cmd)!=0)
@@ -114,6 +123,7 @@ int main(int argc, char** argv) {
 						   	exit(EXIT_FAILURE);
 						}
 					}
+					sigprocmask(SIG_SETMASK, &prev, NULL);
 		    		exit(0);
 		    	}
 		    	else if(pid == -1)
