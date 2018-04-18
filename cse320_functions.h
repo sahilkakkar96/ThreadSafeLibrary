@@ -2,10 +2,14 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <signal.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <semaphore.h>
+
 
 
 void initiate_structs();

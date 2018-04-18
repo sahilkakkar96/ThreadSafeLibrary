@@ -1,9 +1,12 @@
 #include "cse320_functions.h"
+sem_t s;
 static int aiu_var;
 static int fiu_var;
 
 void initiate_structs()
 {
+	sem_init(&s, 0, 1);
+	sem_wait (&s);
 	struct addr_in_use aiu_default= {NULL,0};
 	struct files_in_use fiu_default= {.filename=NULL, .ref_count=0};
 	int wnua;													//wnua - will not use again xD
@@ -15,10 +18,12 @@ void initiate_structs()
 	{
 		finu[wnua] = fiu_default;
 	}
+	sem_post(&s);
 }
 
 void *cse320_malloc(size_t size)
 {
+	sem_wait (&s);
 	if(aiu_var < 25)
 	{
 		if(ainu[aiu_var].addr==NULL)
@@ -27,14 +32,21 @@ void *cse320_malloc(size_t size)
 			ainu[aiu_var].addr= mr;
 			ainu[aiu_var].ref_count +=1;
 			aiu_var++;
+			sem_post (&s);
 			return ainu[aiu_var-1].addr;
 		}
-		else return ainu[aiu_var].addr;	
+		else
+		{
+			sem_post (&s);
+			return ainu[aiu_var].addr;
+		} 
+				
 	}
 	else 
 	{
 		printf("Not enough memory\n");
 		errno=ENOMEM;
+		sem_post(&s);
 		exit(-1);
 	}
 	
