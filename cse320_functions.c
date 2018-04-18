@@ -54,6 +54,7 @@ void *cse320_malloc(size_t size)
 
 void cse320_free(void *ptr)
 {
+	sem_wait (&s);
 	int i;
 	for(i=0;i<25;i++)
 	{
@@ -62,16 +63,19 @@ void cse320_free(void *ptr)
 			ainu[i].ref_count -=1;
 			ainu[i].addr=NULL;
 			free(ainu[i].addr);
+			sem_post(&s);
 			return;
 		}
 	}
 	printf("Free: Illegal address\n");
 	errno = EFAULT;
+	sem_post(&s);
 	exit(-1);
 }
 
 FILE *cse320_fopen(char *filename, char *mode)
 {
+	sem_wait (&s);
 	int i;
 	if(fiu_var < 25)
 	{
@@ -82,6 +86,7 @@ FILE *cse320_fopen(char *filename, char *mode)
 				if((strcmp(filename,finu[i].filename)==0))
 				{
 					finu[i].ref_count +=1;
+					sem_post(&s);
 					return finu[i].fileptr;
 				}
 			}
@@ -93,20 +98,27 @@ FILE *cse320_fopen(char *filename, char *mode)
 			finu[fiu_var].ref_count +=1;
 			finu[fiu_var].fileptr= fopen(filename,mode);
 			fiu_var++;
+			sem_post(&s);
 			return finu[fiu_var-1].fileptr;
 		}
-		else return finu[fiu_var].fileptr;	
+		else 
+		{
+			sem_post(&s);
+			return finu[fiu_var].fileptr;
+		}	
 	}
 	else 
 	{
 		printf("Too many opened files\n");
 		errno=ENFILE;
+		sem_post(&s);
 		exit(-1);
 	}
 }
 
 int cse320_fclose(char *filename)
 {
+	sem_wait (&s);
 	int i;
 		for(i=0;i<25;i++)
 		{
@@ -122,12 +134,14 @@ int cse320_fclose(char *filename)
 							finu[i].filename=NULL;
 							fclose(finu[i].fileptr);
 						}
+						sem_post(&s);
 						return 0;
 					}
 					else
 					{
 						printf("Close: Ref count is zero\n");
 						errno=EINVAL;
+						sem_post(&s);
 						exit(-1);
 					}
 				}
@@ -136,11 +150,13 @@ int cse320_fclose(char *filename)
 		}
 		printf("Close: Illegal filename\n");
 		errno=ENOENT;
+		sem_post(&s);
 		exit(-1);
 }
 
 void cse320_clean()
 {
+	sem_wait (&s);
 	int i;
 		for(i=0;i<25;i++)
 		{
@@ -167,6 +183,42 @@ void cse320_clean()
 			free(ainu[i].addr);
 		}
 	}
+	sem_post(&s);
 }
 
-/*** Just to check the implementation of cse320_functions ***/
+pid_t cse320_fork()
+{
+	sem_wait (&s);
+	pid_t pid;
+	struct itimerval timer_val;
+	timer_val.it_value.tv_sec = 10;
+  	timer_val.it_value.tv_usec = 10;																	
+  	timer_val.it_interval=timer_val.it_value;					
+  																/*			struct itimerval {
+																               struct timeval it_interval; 
+																               struct timeval it_value;    
+																           };
+																
+																           struct timeval {
+																               time_t      tv_sec;         
+																               suseconds_t tv_usec;        
+																           };
+																 */
+   	pid = fork();
+   	if(cse320_settimer(ITIMER_REAL,&timer_val,NULL)== -1) 
+    {
+    	perror("error calling setitimer()");
+    	sem_post(&s);
+    	exit(1);
+  	}
+  	sem_post(&s);
+   	return pid;
+} 
+int cse320_settimer(int which, const struct itimerval *new_value, struct itimerval *old_value)
+{
+	int i;
+	sem_wait (&s);
+	i=setitimer(which, new_value,old_value);
+	sem_post(&s);
+	return i;
+}

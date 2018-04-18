@@ -9,8 +9,11 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <semaphore.h>
+#include <sys/time.h>
 
 
+pid_t cse320_fork();
+int cse320_settimer(int which, const struct itimerval *value, struct itimerval *ovalue); 
 
 void initiate_structs();
 void *cse320_malloc(size_t size);       		 				//function returns a pointer to the allocated memory, or NULL if the request fails.

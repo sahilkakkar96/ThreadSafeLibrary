@@ -3,6 +3,6 @@ main:	main.c
 	gcc	-Wall	-Werror	-g	-o	part1	main.c
 part2:	test1
 test1:	test1.c
-	gcc	-Wall	-Werror	-g	-lrt	-lpthread	-o	part2	test1.c	cse320_functions.c	  									 	
+	gcc	-Wall	-Werror	-g	-o	part2	test1.c	cse320_functions.c	-lrt	-lpthread	  									 	
 clean:
 	rm	-f	part1 part2
