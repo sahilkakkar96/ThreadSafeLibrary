@@ -1,8 +1,5 @@
 #include "cse320_functions.h"
 
-static int aiu_var;
-static int fiu_var;
-
 void initiate_structs()
 {
 	sem_init(&s, 0, 1);

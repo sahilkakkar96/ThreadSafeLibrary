@@ -12,6 +12,8 @@
 #include <sys/time.h>
 
 sem_t s;
+static int aiu_var;
+static int fiu_var;
 pid_t cse320_fork();
 int cse320_settimer(int which, const struct itimerval *value, struct itimerval *ovalue); 
 
