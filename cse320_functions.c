@@ -58,8 +58,8 @@ void cse320_free(void *ptr)
 		if(ainu[i].addr== ptr && ainu[i].ref_count>0)
 		{
 			ainu[i].ref_count -=1;
-			ainu[i].addr=NULL;
 			free(ainu[i].addr);
+			ainu[i].addr=NULL;
 			sem_post(&s);
 			return;
 		}
@@ -157,27 +157,25 @@ void cse320_clean()
 	int i;
 		for(i=0;i<25;i++)
 		{
-			if(finu[i].filename!=NULL)
+			if(finu[i].ref_count>0)
 			{
-				if(finu[i].ref_count>0)
+				finu[i].ref_count =0;
+				finu[i].filename=NULL;
+				if(finu[i].ref_count==0)
 				{
-					finu[i].ref_count =0;
-					finu[i].filename=NULL;
-					if(finu[i].ref_count==0)
-					{
-						fclose(finu[i].fileptr);
-					}
+					fclose(finu[i].fileptr);
 				}
 			}
 		}
 		
+		
 	for(i=0;i<25;i++)
 	{
-		if(ainu[i].addr!=NULL && ainu[i].ref_count>0)
+		if(ainu[i].ref_count>0)
 		{
 			ainu[i].ref_count=0;
-			ainu[i].addr=NULL;
 			free(ainu[i].addr);
+			ainu[i].addr=NULL;
 		}
 	}
 	sem_post(&s);
