@@ -5,11 +5,23 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+//#include "cse320_functions.h"
 
 int main(int argc, char** argv) {
 
+//	initiate_structs();
 	printf("USER PROGRAM GOING TO SLEEP\n");
-	sleep(12);
+	sleep(5);
 	printf("USER PROGRAM RAN AFTER SLEEP\n");
-	return 0;
+	
+/*	pid_t pid;
+	pid=cse320_fork();
+	if(pid==0)
+	{
+		char *args[]={"ls",NULL};
+		execvp("ls",args);
+		exit(0);
+	}
+*/
+return 0;	
 }

@@ -1,5 +1,5 @@
 #include "cse320_functions.h"
-sem_t s;
+
 static int aiu_var;
 static int fiu_var;
 
@@ -190,11 +190,11 @@ pid_t cse320_fork()
 {
 	sem_wait (&s);
 	pid_t pid;
-	struct itimerval timer_val;
-	timer_val.it_value.tv_sec = 10;
-  	timer_val.it_value.tv_usec = 10;																	
+/*	struct itimerval timer_val;
+	timer_val.it_value.tv_sec = 1;
+  	timer_val.it_value.tv_usec = 1;																	
   	timer_val.it_interval=timer_val.it_value;					
-  																/*			struct itimerval {
+  																			struct itimerval {
 																               struct timeval it_interval; 
 																               struct timeval it_value;    
 																           };
@@ -203,14 +203,15 @@ pid_t cse320_fork()
 																               time_t      tv_sec;         
 																               suseconds_t tv_usec;        
 																           };
-																 */
-   	pid = fork();
+																 
+   	
    	if(cse320_settimer(ITIMER_REAL,&timer_val,NULL)== -1) 
     {
     	perror("error calling setitimer()");
     	sem_post(&s);
     	exit(1);
-  	}
+  	}*/
+  	pid = fork();
   	sem_post(&s);
    	return pid;
 } 

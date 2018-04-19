@@ -7,7 +7,6 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-
 int main(int argc, char** argv) {
 
 	printf("User can type ’help’ to see the list of commands\n");
@@ -18,6 +17,7 @@ int main(int argc, char** argv) {
    
     while(1)
 {
+	signal(SIGINT, SIG_DFL);
 	status=0;
     printf("Which application to run - ");
     fgets(app , sizeof(app), stdin);
@@ -50,6 +50,8 @@ int main(int argc, char** argv) {
 		
 		if(strcmp(*(parseRun),"run")==0)                              //run ls [flags]
 	    {
+	    	signal(SIGINT, SIG_IGN);
+
 	    	if(q==1)
 	    	{
 	    		printf("Enter Correct Command to Run\n");
@@ -67,13 +69,13 @@ int main(int argc, char** argv) {
 	    		*(cmd+a)=NULL;
 		    	pid_t pid,wpid;
 		    	pid = fork();
-		    	sigset_t mask,prev;
+		    /*	sigset_t mask,prev;
 		    	sigemptyset(&mask);
 				sigfillset(&mask);
 				sigprocmask(SIG_BLOCK, &mask, &prev);
-				
+			*/	
 		    	if(pid == 0)
-		    	{
+		    	{signal(SIGINT, SIG_DFL);
 		    		if (execvp(*(parseRun+1), cmd)!=0)
 			        {
 			        	char changename[257];
@@ -87,7 +89,7 @@ int main(int argc, char** argv) {
 						   	exit(EXIT_FAILURE);
 						}
 			        }
-			        sigprocmask(SIG_SETMASK, &prev, NULL);
+			        //sigprocmask(SIG_SETMASK, &prev, NULL);
 		    		exit(0);
 		    	}
 		    	else if(pid == -1)
@@ -103,13 +105,13 @@ int main(int argc, char** argv) {
 	    		char *cmd[] = { *(parseRun+1), NULL };
 		    	pid_t pid,wpid;
 		    	pid = fork();
-		    	sigset_t mask,prev;
+		    /*	sigset_t mask,prev;
 		    	sigemptyset(&mask);
 				sigfillset(&mask);
 				sigprocmask(SIG_BLOCK, &mask, &prev);
-				
+			*/	
 		    	if(pid == 0)
-		    	{
+		    	{signal(SIGINT, SIG_DFL);
 		    		if (execvp(*(parseRun+1), cmd)!=0)
 			        {
 				    	char changename[257];
@@ -123,7 +125,7 @@ int main(int argc, char** argv) {
 						   	exit(EXIT_FAILURE);
 						}
 					}
-					sigprocmask(SIG_SETMASK, &prev, NULL);
+					//sigprocmask(SIG_SETMASK, &prev, NULL);
 		    		exit(0);
 		    	}
 		    	else if(pid == -1)
@@ -133,6 +135,7 @@ int main(int argc, char** argv) {
 		    	else while ((wpid = wait(&status)) > 0);	
 		    		
 	    	}
+	    	
 	    }  
 	    else printf("Enter Correct Command to Run\n");
     }
@@ -140,6 +143,8 @@ int main(int argc, char** argv) {
     
 	return -1;
 }
+
+
 /*
 FILE *f1;
 	    f1 = fopen(filename, "r");
