@@ -11,7 +11,7 @@
 #include <semaphore.h>
 #include <sys/time.h>
 
-sem_t s;
+sem_t s,m,f,o,c,cc;
 static int aiu_var;
 static int fiu_var;
 

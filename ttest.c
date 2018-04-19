@@ -34,6 +34,8 @@ int main()
          pthread_create(&tid, NULL, myMalloc, NULL);
          pthread_join(tid,(void**)&b);
     }
+    
+    
  	for (i = 0; i < 10; i++)
     printf("Address of struct [%d] = %p , Reference Count = %d\n", i, ainu[i].addr,ainu[i].ref_count);
     
@@ -41,6 +43,7 @@ int main()
         pthread_join(tid,(void**)&b);
  	for (i = 0; i < 10; i++)
     printf("Address of struct [%d] = %p , Reference Count = %d\n", i, ainu[i].addr,ainu[i].ref_count);
+    
     
     pthread_create(&tid, NULL, myFopen, NULL);
         pthread_join(tid,(void**)&b);
