@@ -200,15 +200,9 @@ void sigalrm_handler(int sig)
 pid_t cse320_fork()
 {
 	signal(SIGALRM,sigalrm_handler);
-	//signal(SIGCHLD,SIG_IGN);
 	pid_t pid;
 	pid = fork();
-	if(pid==0){
-  	return pid;
-  	}
-  	else {
-  			pause();	
-  		 }
+	return pid;
 } 
 int cse320_settimer()
 {

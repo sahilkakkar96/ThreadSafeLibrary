@@ -2,27 +2,15 @@
 
 int main(int argc, char** argv){
 initiate_structs();
-
+int pi=getpid();
+pid_t pid;
 cse320_settimer();
-/*
-pid_t pid[10];
-int i;
-	for (i = 0; i < 10; i++) {
-  if ((pid[i] = cse320_fork()) < 0) {
-    perror("fork");
-    abort();
-  } else if (pid[i] == 0) {
-    printf("HOW many times\n");
-    exit(0);
-  }
-
+if(pid=cse320_fork()==0)
+{
+	sleep(5);
 }
-*/
-//char *args[]={"ps","-h",NULL};
 cse320_fork();
-cse320_fork();	
-//execvp("ps",args);
-printf("HOW many times from %d\n",getpid());
-//sleep(2);
+if(getpid()==pi)	
+while(1);
 return 0;
 }
