@@ -12,9 +12,9 @@ PART 1 :
 2. To run write "./part1"
 3. To see the list of commands type 'help'
 
---------
-PART 2 : 
---------
+-----------
+PART 2 & 3: 
+-----------
 	NOTE: For Part 2 and 3 compile using format -> "gcc -o Objectfile_Name Objectfile_Name.c cse320_functions.c -lpthread"
 
 1. Insert this statement as the first line of your code -> #include "cse320_functions.h" 
@@ -43,8 +43,10 @@ PART 2 :
 	  };      
 	- addr_in_use can be accessed through the word "ainu[index]"
 	- files_in_use can be accessed through the word "finu[index]"
+5. User can also use two more functions but these aren't thread safe :
+
+	- pid_t cse320_fork();										//This function offers deferred child processes reaping based on timer user sets
+	- int cse320_settimer();									//This functions helps the user set a timer for child processes reaping
 	
---------
-PART 3 : 
---------	
+	NOTE: User needs to call "cse320_settimer()" before using cse320_fork() for the first time	
 

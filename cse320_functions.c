@@ -192,7 +192,7 @@ void cse320_clean()
 
 void sigalrm_handler(int sig) 
 {	
-	signal(SIGALRM, SIG_IGN); 
+	signal(SIGALRM, SIG_IGN);
     while(waitpid(-1,0,WNOHANG)>0); 
 	signal(SIGALRM, sigalrm_handler); 
 }
@@ -209,7 +209,6 @@ pid_t cse320_fork()
   	else {
   			pause();	
   		 }
-
 } 
 int cse320_settimer()
 {

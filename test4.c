@@ -18,11 +18,11 @@ int i;
 
 }
 */
-char *args[]={"ps","-h",NULL};
+//char *args[]={"ps","-h",NULL};
 cse320_fork();
 cse320_fork();	
-execvp("ps",args);
+//execvp("ps",args);
 printf("HOW many times from %d\n",getpid());
-
+//sleep(2);
 return 0;
 }
