@@ -25,7 +25,7 @@ void initiate_structs()
 
 void *cse320_malloc(size_t size)
 {
-	sem_wait (&m);
+	sem_wait(&m);
 	if(aiu_var < 25)
 	{
 		if(ainu[aiu_var].addr==NULL)
@@ -190,16 +190,40 @@ void cse320_clean()
 	sem_post(&cc);
 }
 
+void sigalrm_handler(int sig) 
+{	
+	signal(SIGALRM, SIG_IGN); 
+    while(waitpid(-1,0,WNOHANG)>0); 
+	signal(SIGALRM, sigalrm_handler); 
+}
+
 pid_t cse320_fork()
 {
-	sem_wait (&s);
+	signal(SIGALRM,sigalrm_handler);
+	//signal(SIGCHLD,SIG_IGN);
 	pid_t pid;
+	pid = fork();
+	if(pid==0){
+  	return pid;
+  	}
+  	else {
+  			pause();	
+  		 }
+
+} 
+int cse320_settimer()
+{
+	signal(SIGALRM,sigalrm_handler);
+	int i,N;
+	printf("Enter the interval in seconds for reaping child processes - ");
+	scanf ("%d",&N);
+	struct itimerval timer_val;
+				
 	
-/*	struct itimerval timer_val;
-	timer_val.it_value.tv_sec = 1;
-  	timer_val.it_value.tv_usec = 1;																	
+	timer_val.it_value.tv_sec = N;
+  	timer_val.it_value.tv_usec = 0;																	
   	timer_val.it_interval=timer_val.it_value;					
-  																			struct itimerval {
+  																		/*	struct itimerval {
 																               struct timeval it_interval; 
 																               struct timeval it_value;    
 																           };
@@ -208,23 +232,12 @@ pid_t cse320_fork()
 																               time_t      tv_sec;         
 																               suseconds_t tv_usec;        
 																           };
-																 
+																 		*/
    	
-   	if(cse320_settimer(ITIMER_REAL,&timer_val,NULL)== -1) 
+	if(i=setitimer(ITIMER_REAL,&timer_val,NULL)== -1) 
     {
-    	perror("error calling setitimer()");
-    	sem_post(&s);
-    	exit(1);
-  	}*/
-  	pid = fork();
-  	sem_post(&s);
-   	return pid;
-} 
-int cse320_settimer(int which, const struct itimerval *new_value, struct itimerval *old_value)
-{
-	int i;
-	sem_wait (&s);
-	i=setitimer(which, new_value,old_value);
-	sem_post(&s);
+    	printf("Error setting timer\n");
+    	exit(-1);
+  	}
 	return i;
 }

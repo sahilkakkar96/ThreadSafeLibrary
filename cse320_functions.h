@@ -15,8 +15,9 @@ sem_t s,m,f,o,c,cc;
 static int aiu_var;
 static int fiu_var;
 
+void sigalrm_handler(int sig);
 pid_t cse320_fork();
-int cse320_settimer(int which, const struct itimerval *value, struct itimerval *ovalue); 
+int cse320_settimer(); 
 
 void initiate_structs();
 void *cse320_malloc(size_t size);       		 				//function returns a pointer to the allocated memory, or NULL if the request fails.
